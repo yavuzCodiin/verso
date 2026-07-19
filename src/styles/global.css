@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial,
+    sans-serif;
+  transition: background var(--tr), color var(--tr);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Thin themed scrollbars (Verso.dc.html .vscroll) */
+.vscroll {
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.vscroll::-webkit-scrollbar {
+  width: 9px;
+}
+.vscroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+}
+
+/* Overlay/card entrance animations (README §10) */
+@keyframes vpop {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes vspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ovl {
+  animation: vfade 0.12s ease;
+}
+.pop {
+  animation: vpop 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
+}

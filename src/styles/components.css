@@ -1,0 +1,191 @@
+/*
+ * Etkileşim/hover sınıfları.
+ * Not: inline `background` YALNIZCA "seçili" satırlarda set edilir; böylece :hover
+ * (var(--hover)) seçili olmayan satırlarda çalışır (inline stil :hover'ı ezerdi).
+ */
+.rowh {
+  transition: background var(--tr);
+}
+.rowh:hover {
+  background: var(--hover);
+}
+
+.plush {
+  transition: background var(--tr);
+}
+.plush:hover {
+  background: var(--soft);
+}
+
+.iconh {
+  transition: background var(--tr);
+}
+.iconh:hover {
+  background: var(--hover);
+}
+
+/* Kenarlık rengi hover'ı (arama tetikleyici, Aa). Kenarlık sınıfta tanımlı ki
+   :hover onu ezebilsin. */
+.trigger {
+  border: 1px solid var(--border);
+  transition: border-color var(--tr);
+}
+.trigger:hover {
+  border-color: var(--line);
+}
+
+.ctah {
+  transition: background var(--tr);
+}
+.ctah:hover {
+  background: var(--hover);
+}
+
+/*
+ * Okuyucu gövdesi — verso-core'dan gelen sanitize edilmiş HTML.
+ * Aa ayarları --read-scale / --read-family sütunda set edilir (Reader).
+ */
+.reader-prose {
+  font-family: var(--read-family, var(--readfont));
+  color: var(--fg);
+}
+.reader-prose > *:first-child {
+  margin-top: 0;
+}
+.reader-prose p {
+  font-size: calc(17px * var(--read-scale, 1));
+  line-height: 1.75;
+  margin: 0 0 17px;
+}
+.reader-prose h1,
+.reader-prose h2,
+.reader-prose h3 {
+  font-family: var(--titlefont);
+  color: var(--fg);
+  line-height: 1.25;
+}
+.reader-prose h2 {
+  font-size: calc(21px * var(--read-scale, 1));
+  font-weight: 600;
+  margin: 28px 0 11px;
+}
+.reader-prose h3 {
+  font-size: calc(18px * var(--read-scale, 1));
+  font-weight: 600;
+  margin: 24px 0 10px;
+}
+.reader-prose a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.reader-prose ul,
+.reader-prose ol {
+  font-size: calc(17px * var(--read-scale, 1));
+  line-height: 1.75;
+  margin: 0 0 17px;
+  padding-left: 1.4em;
+}
+.reader-prose li {
+  margin: 4px 0;
+}
+.reader-prose blockquote {
+  font-style: italic;
+  color: var(--dim);
+  border-left: 2px solid var(--line);
+  margin: 0 0 17px;
+  padding: 2px 0 2px 20px;
+}
+.reader-prose pre {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 15px 17px;
+  overflow: auto;
+  font: 13px/1.62 ui-monospace, Menlo, monospace;
+  color: var(--fg);
+  margin: 0 0 17px;
+}
+.reader-prose code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--chip);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.reader-prose pre code {
+  background: none;
+  padding: 0;
+}
+.reader-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: zoom-in;
+}
+.reader-prose iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+  border-radius: 10px;
+  margin: 14px 0;
+  background: #000;
+}
+/* YouTube küçük-resim kartı (tıkla → tarayıcıda aç) */
+.reader-prose .verso-yt {
+  position: relative;
+  display: block;
+  margin: 16px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.reader-prose .verso-yt img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+.reader-prose .verso-yt-badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  background: rgba(0, 0, 0, 0.42);
+  transition: background 0.15s ease;
+}
+.reader-prose .verso-yt:hover .verso-yt-badge {
+  background: rgba(0, 0, 0, 0.24);
+}
+.reader-prose figure {
+  margin: 16px 0;
+}
+.reader-prose figcaption {
+  font-size: 12.5px;
+  color: var(--faint);
+  text-align: center;
+  margin-top: 6px;
+}
+.reader-prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* Uzun makale listeleri: ekran dışı satırlar render edilmez (sanallaştırma). */
+.art-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 110px;
+}

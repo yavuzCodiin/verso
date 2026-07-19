@@ -1,0 +1,106 @@
+/*
+ * Verso tema token sistemi — README §10 / Verso.dc.html satır 18-21 ile BİREBİR.
+ * data-theme öznitelikleri kök <html> öğesinde değişir (App.tsx).
+ * Yazı tipleri Fontsource ile paketlendiği için --titlefont/--readfont
+ * "Newsreader Variable" ailesini kullanır (Google 'Newsreader' + serif yedekleriyle).
+ */
+
+:root[data-theme] {
+  --tr: 0.18s ease;
+}
+
+/* ── Kağıt ── */
+:root[data-theme="kagit"] {
+  --bg: #efeae0;
+  --panel: #f6f1e7;
+  --panel2: #f9f5ee;
+  --reader: #fdfaf4;
+  --fg: #33302a;
+  --dim: #6e675b;
+  --faint: #a89f8f;
+  --accent: #b0532a;
+  --accent2: #b0532a;
+  --soft: rgba(176, 83, 42, 0.08);
+  --line: rgba(176, 83, 42, 0.3);
+  --border: rgba(35, 32, 25, 0.1);
+  --hover: rgba(35, 32, 25, 0.045);
+  --code: #f3eee3;
+  --chip: rgba(35, 32, 25, 0.055);
+  --seltext: #232019;
+  --titlefont: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --readfont: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --titlewt: 500;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+}
+
+/* ── Gece ── */
+:root[data-theme="gece"] {
+  --bg: #131418;
+  --panel: #17181d;
+  --panel2: #15161a;
+  --reader: #1a1b21;
+  --fg: #d5d0c4;
+  --dim: #8f8b83;
+  --faint: #6f6b63;
+  --accent: #d07a4f;
+  --accent2: #d07a4f;
+  --soft: rgba(208, 122, 79, 0.13);
+  --line: rgba(208, 122, 79, 0.35);
+  --border: rgba(255, 255, 255, 0.07);
+  --hover: rgba(255, 255, 255, 0.04);
+  --code: #22242b;
+  --chip: rgba(255, 255, 255, 0.06);
+  --seltext: #f0ece2;
+  --titlefont: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --readfont: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --titlewt: 500;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Yosun ── */
+:root[data-theme="yosun"] {
+  --bg: #dfe5d6;
+  --panel: #e6ebde;
+  --panel2: #eef2e6;
+  --reader: #f2f5ec;
+  --fg: #232a1f;
+  --dim: #5a6150;
+  --faint: #8a9180;
+  --accent: #4a7a4a;
+  --accent2: #4a7a4a;
+  --soft: rgba(74, 122, 74, 0.1);
+  --line: rgba(74, 122, 74, 0.35);
+  --border: rgba(35, 42, 31, 0.12);
+  --hover: rgba(35, 42, 31, 0.045);
+  --code: #e2e8d4;
+  --chip: rgba(35, 42, 31, 0.06);
+  --seltext: #232a1f;
+  --titlefont: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --readfont: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --titlewt: 500;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Cyberpunk ── */
+:root[data-theme="cyber"] {
+  --bg: #080b10;
+  --panel: #0c1016;
+  --panel2: #0a0e13;
+  --reader: #0b0f14;
+  --fg: #b7c2c9;
+  --dim: #6b7a80;
+  --faint: #47535b;
+  --accent: #3ef08a;
+  --accent2: #ff5ea8;
+  --soft: rgba(62, 240, 138, 0.1);
+  --line: rgba(62, 240, 138, 0.3);
+  --border: rgba(62, 240, 138, 0.16);
+  --hover: rgba(62, 240, 138, 0.06);
+  --code: #0e141b;
+  --chip: rgba(62, 240, 138, 0.08);
+  --seltext: #e8fff2;
+  --titlefont: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --readfont: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --titlewt: 700;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}

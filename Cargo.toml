@@ -1,0 +1,6 @@
+# Verso Cargo workspace kökü.
+# UI'dan bağımsız çekirdek (core) ile ince Tauri kabuğu (src-tauri) ayrı crate'ler;
+# ileride Android/Windows kabuğu aynı `verso-core`'u paylaşır (README §4).
+[workspace]
+resolver = "2"
+members = ["src-tauri", "core"]

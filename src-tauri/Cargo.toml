@@ -1,0 +1,44 @@
+[package]
+name = "verso"
+version = "0.1.0"
+description = "Verso — sakin, editoryal bir RSS okuyucu"
+authors = ["Verso"]
+license = ""
+repository = ""
+edition = "2021"
+rust-version = "1.77.2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "verso_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.6.3", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+log = "0.4"
+# "unstable": Web modu için child-webview (add_child) API'si.
+tauri = { version = "2.11.3", features = ["unstable"] }
+tauri-plugin-log = "2"
+
+# Platformdan bağımsız çekirdek (README §4).
+verso-core = { path = "../core" }
+tauri-plugin-notification = "2.3.3"
+tauri-plugin-dialog = "2.7.2"
+open = "5.4.0"
+arboard = "3.6.1"
+tauri-plugin-updater = "2.10.1"
+tauri-plugin-process = "2.3.1"
+
+# ── macOS: ağ-seviyesi adblock (WKContentRuleList) ──
+# Sürümler wry'nin kullandığıyla birebir aynı olmalı ki WKWebView/WKUserContentController
+# tipleri uyuşsun (Cargo.lock: objc2 0.6, objc2-web-kit 0.3, block2 0.6).
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSString", "NSError"] }
+objc2-web-kit = { version = "0.3", default-features = false, features = ["WKContentRuleList", "WKContentRuleListStore", "WKUserContentController", "block2"] }
+block2 = "0.6"

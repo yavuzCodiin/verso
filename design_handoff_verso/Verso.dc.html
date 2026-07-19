@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#26262b;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+button{font:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+.app[data-theme]{--tr:.18s ease}
+.app[data-theme="kagit"]{--bg:#efeae0;--panel:#f6f1e7;--panel2:#f9f5ee;--reader:#fdfaf4;--fg:#33302a;--dim:#6e675b;--faint:#a89f8f;--accent:#b0532a;--accent2:#b0532a;--soft:rgba(176,83,42,.08);--line:rgba(176,83,42,.3);--border:rgba(35,32,25,.1);--hover:rgba(35,32,25,.045);--code:#f3eee3;--chip:rgba(35,32,25,.055);--seltext:#232019;--titlefont:'Newsreader',Georgia,serif;--readfont:'Newsreader',Georgia,serif;--titlewt:500;--shadow:0 24px 60px rgba(0,0,0,.22)}
+.app[data-theme="gece"]{--bg:#131418;--panel:#17181d;--panel2:#15161a;--reader:#1a1b21;--fg:#d5d0c4;--dim:#8f8b83;--faint:#6f6b63;--accent:#d07a4f;--accent2:#d07a4f;--soft:rgba(208,122,79,.13);--line:rgba(208,122,79,.35);--border:rgba(255,255,255,.07);--hover:rgba(255,255,255,.04);--code:#22242b;--chip:rgba(255,255,255,.06);--seltext:#f0ece2;--titlefont:'Newsreader',Georgia,serif;--readfont:'Newsreader',Georgia,serif;--titlewt:500;--shadow:0 24px 60px rgba(0,0,0,.4)}
+.app[data-theme="yosun"]{--bg:#dfe5d6;--panel:#e6ebde;--panel2:#eef2e6;--reader:#f2f5ec;--fg:#232a1f;--dim:#5a6150;--faint:#8a9180;--accent:#4a7a4a;--accent2:#4a7a4a;--soft:rgba(74,122,74,.1);--line:rgba(74,122,74,.35);--border:rgba(35,42,31,.12);--hover:rgba(35,42,31,.045);--code:#e2e8d4;--chip:rgba(35,42,31,.06);--seltext:#232a1f;--titlefont:'Newsreader',Georgia,serif;--readfont:'Newsreader',Georgia,serif;--titlewt:500;--shadow:0 24px 60px rgba(0,0,0,.2)}
+.app[data-theme="cyber"]{--bg:#080b10;--panel:#0c1016;--panel2:#0a0e13;--reader:#0b0f14;--fg:#b7c2c9;--dim:#6b7a80;--faint:#47535b;--accent:#3ef08a;--accent2:#ff5ea8;--soft:rgba(62,240,138,.1);--line:rgba(62,240,138,.3);--border:rgba(62,240,138,.16);--hover:rgba(62,240,138,.06);--code:#0e141b;--chip:rgba(62,240,138,.08);--seltext:#e8fff2;--titlefont:-apple-system,"Helvetica Neue",sans-serif;--readfont:-apple-system,"Helvetica Neue",sans-serif;--titlewt:700;--shadow:0 24px 60px rgba(0,0,0,.5)}
+.vscroll{overflow-y:auto;scrollbar-width:thin}
+.vscroll::-webkit-scrollbar{width:9px}
+.vscroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
+@keyframes vpop{from{opacity:0;transform:scale(.97) translateY(6px)}to{opacity:1;transform:none}}
+@keyframes vfade{from{opacity:0}to{opacity:1}}
+@keyframes vspin{to{transform:rotate(360deg)}}
+.ovl{animation:vfade .12s ease}
+.pop{animation:vpop .14s cubic-bezier(.2,.8,.2,1)}
+</style>
+</helmet>
+
+<div class="app" data-theme="{{ theme }}" data-screen-label="Verso {{ themeLabel }}" style="width:1340px;height:860px;border-radius:13px;overflow:hidden;background:var(--bg);color:var(--fg);box-shadow:var(--shadow);display:flex;flex-direction:column;position:relative;transition:background var(--tr),color var(--tr)">
+
+  <!-- ══ TITLE BAR ══ -->
+  <div style="height:50px;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--panel);transition:background var(--tr)">
+    <div style="display:flex;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></span><span style="width:12px;height:12px;border-radius:50%;background:#febc2e"></span><span style="width:12px;height:12px;border-radius:50%;background:#28c840"></span></div>
+    <div style="width:1px;height:20px;background:var(--border);margin-left:2px"></div>
+    <span style="font-family:var(--titlefont);font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--fg)">Verso</span>
+    <span style="font-size:12px;color:var(--faint)">{{ breadcrumb }}</span>
+    <div style="flex:1"></div>
+    <button onClick="{{ openCmd }}" style="display:flex;align-items:center;gap:8px;background:var(--chip);border:1px solid var(--border);border-radius:8px;padding:6px 12px;width:250px;transition:border-color var(--tr)" style-hover="border-color:var(--line)">
+      <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="var(--faint)" stroke-width="1.5"></circle><path d="M8.5 8.5l3 3" stroke="var(--faint)" stroke-width="1.5" stroke-linecap="round"></path></svg>
+      <span style="font-size:12.5px;color:var(--faint)">Ara veya komut…</span>
+      <span style="margin-left:auto;font:11px ui-monospace,Menlo,monospace;color:var(--faint);border:1px solid var(--border);border-radius:5px;padding:1px 6px">⌘K</span>
+    </button>
+    <button onClick="{{ refresh }}" title="Yenile" style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background var(--tr)" style-hover="background:var(--hover)">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="{{ spinStyle }}"><path d="M13 8a5 5 0 1 1-1.7-3.75" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"></path><path d="M13 2.5v3h-3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+    <button onClick="{{ openTheme }}" title="Tema" style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background var(--tr)" style-hover="background:var(--hover)">
+      <span style="width:15px;height:15px;border-radius:50%;background:linear-gradient(135deg,var(--reader) 0 50%,var(--accent) 50% 100%);border:1px solid var(--border);box-shadow:inset 0 0 0 1px var(--panel)"></span>
+    </button>
+  </div>
+
+  <div style="flex:1;display:flex;min-height:0">
+
+    <!-- ══ SIDEBAR ══ -->
+    <div class="vscroll" style="width:246px;background:var(--panel);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;padding:12px 0;transition:background var(--tr)">
+      <div style="padding:2px 16px 8px;display:flex;align-items:center;gap:8px">
+        <span style="font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em">Akıllı</span>
+      </div>
+      <sc-for list="{{ smartLists }}" as="s" hint-placeholder-count="3">
+        <button onClick="{{ s.onClick }}" style="{{ s.rowStyle }}" style-hover="background:var(--hover)">
+          <span style="width:17px;text-align:center;font-size:12px;color:{{ s.iconColor }}">{{ s.icon }}</span>
+          <span style="flex:1;text-align:left;font-size:13px;color:{{ s.textColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ s.name }}</span>
+          <span style="font:11px ui-monospace,Menlo,monospace;color:var(--faint)">{{ s.count }}</span>
+        </button>
+      </sc-for>
+
+      <div style="padding:16px 16px 8px;display:flex;align-items:center;gap:8px">
+        <span style="flex:1;font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em">Alanlar</span>
+        <button onClick="{{ openAdd }}" title="Yeni alan" style="color:var(--accent);font-size:15px;line-height:1;width:18px;height:18px;border-radius:5px" style-hover="background:var(--soft)">＋</button>
+      </div>
+      <sc-for list="{{ spaces }}" as="sp" hint-placeholder-count="3">
+        <button onClick="{{ sp.onClick }}" style="{{ sp.rowStyle }}" style-hover="background:var(--hover)">
+          <span style="width:17px;display:flex;justify-content:center"><span style="width:9px;height:9px;border-radius:3px;background:{{ sp.color }}"></span></span>
+          <span style="flex:1;text-align:left;font-size:13px;color:{{ sp.textColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ sp.name }}</span>
+          <span style="font:11px ui-monospace,Menlo,monospace;color:{{ sp.countColor }}">{{ sp.count }}</span>
+        </button>
+      </sc-for>
+
+      <div style="padding:16px 16px 8px">
+        <span style="font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em">Kaynaklar</span>
+      </div>
+      <sc-for list="{{ feeds }}" as="f" hint-placeholder-count="8">
+        <button onClick="{{ f.onClick }}" style="{{ f.rowStyle }}" style-hover="background:var(--hover)">
+          <span style="width:18px;height:18px;border-radius:5px;background:{{ f.color }};color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ f.letter }}</span>
+          <span style="flex:1;text-align:left;font-size:13px;color:{{ f.textColor }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.name }}</span>
+          <span style="font:11px ui-monospace,Menlo,monospace;color:var(--faint)">{{ f.count }}</span>
+        </button>
+      </sc-for>
+      <div style="flex:1;min-height:16px"></div>
+      <div style="margin:0 12px;padding:9px 10px 2px;border-top:1px solid var(--border);font-size:10.5px;line-height:1.6;color:var(--faint)">Sessiz saat · 09:00–18:00<br>bildirim yok</div>
+    </div>
+
+    <!-- ══ ARTICLE LIST ══ -->
+    <div style="width:380px;background:var(--panel2);border-right:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;transition:background var(--tr)">
+      <div style="padding:18px 22px 12px;border-bottom:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:7px">
+          <sc-if value="{{ listKicker.show }}" hint-placeholder-val="{{ true }}"><span style="width:9px;height:9px;border-radius:3px;background:{{ listKicker.color }}"></span></sc-if>
+          <span style="font-size:10.5px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.13em">{{ listKicker.text }}</span>
+        </div>
+        <div style="font-family:var(--titlefont);font-size:21px;font-weight:var(--titlewt);color:var(--fg);margin-top:3px">{{ listTitle }} <span style="color:var(--faint);font-size:15px">· {{ listSub }}</span></div>
+      </div>
+      <div class="vscroll" style="flex:1;padding:2px 0">
+        <sc-for list="{{ articles }}" as="a" hint-placeholder-count="7">
+          <button onClick="{{ a.onClick }}" style="{{ a.rowStyle }}" style-hover="background:var(--hover)">
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:5px">
+              <span style="width:6px;height:6px;border-radius:50%;background:{{ a.dotColor }};flex-shrink:0;transform:translateY(-1px)"></span>
+              <span style="font-size:10px;font-weight:600;color:{{ a.metaColor }};text-transform:uppercase;letter-spacing:.1em">{{ a.meta }}</span>
+              <span style="flex:1"></span>
+              <sc-if value="{{ a.starred }}"><span style="font-size:11px;color:var(--accent)">★</span></sc-if>
+            </div>
+            <div style="font-family:var(--titlefont);font-size:17.5px;font-weight:{{ a.titleWeight }};line-height:1.28;color:{{ a.titleColor }}">{{ a.title }}</div>
+            <sc-if value="{{ a.showDek }}"><div style="font-size:12.5px;line-height:1.5;color:var(--dim);margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ a.dek }}</div></sc-if>
+            <sc-if value="{{ a.hasTags }}">
+              <div style="display:flex;gap:5px;margin-top:8px">
+                <sc-for list="{{ a.tags }}" as="t" hint-placeholder-count="2"><span style="font-size:10px;color:{{ t.color }};background:{{ t.bg }};border-radius:4px;padding:2px 7px">#{{ t.name }}</span></sc-for>
+              </div>
+            </sc-if>
+          </button>
+        </sc-for>
+        <div style="height:8px"></div>
+      </div>
+      <div style="padding:9px 20px;border-top:1px solid var(--border);display:flex;gap:14px;font-size:10.5px;color:var(--faint);flex-shrink:0">
+        <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--dim);font-weight:600">J / K</b> gez</span>
+        <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--dim);font-weight:600">M</b> okundu</span>
+        <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--dim);font-weight:600">S</b> yıldız</span>
+        <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--dim);font-weight:600">R</b> sonra oku</span>
+      </div>
+    </div>
+
+    <!-- ══ READER ══ -->
+    <div style="flex:1;background:var(--reader);display:flex;flex-direction:column;min-width:0;transition:background var(--tr)">
+      <div style="height:3px;background:var(--border);flex-shrink:0"><div style="width:{{ progressPct }};height:100%;background:var(--accent);transition:width .2s ease"></div></div>
+      <div style="height:47px;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="display:flex;border:1px solid var(--border);border-radius:8px;padding:2px;background:var(--chip)">
+          <button onClick="{{ setOzet }}" style="{{ tabOzet }}">Özet</button>
+          <button onClick="{{ setTam }}" style="{{ tabTam }}">Tam Metin</button>
+          <button onClick="{{ setWeb }}" style="{{ tabWeb }}">Web</button>
+        </div>
+        <sc-if value="{{ modeTam }}"><span style="font-size:11px;color:var(--accent);display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:var(--accent)"></span>tam içerik çekildi</span></sc-if>
+        <div style="flex:1"></div>
+        <button onClick="{{ openAa }}" style="font-size:12px;color:var(--dim);border:1px solid var(--border);border-radius:7px;padding:4px 11px;transition:border-color var(--tr)" style-hover="border-color:var(--line)">Aa</button>
+        <button onClick="{{ toggleStar }}" title="Yıldızla" style="width:30px;height:30px;border-radius:7px;font-size:15px;color:{{ starColor }};display:flex;align-items:center;justify-content:center" style-hover="background:var(--hover)">{{ starGlyph }}</button>
+        <button onClick="{{ addLater }}" title="Sonra oku" style="width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:var(--dim)" style-hover="background:var(--hover)">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M4 2.5h7a1 1 0 0 1 1 1V13l-4.5-2.7L3 13V3.5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"></path></svg>
+        </button>
+      </div>
+
+      <!-- reader body -->
+      <div class="vscroll" style="flex:1;min-height:0">
+
+        <!-- WEB mode -->
+        <sc-if value="{{ modeWeb }}">
+          <div style="padding:14px 18px 0">
+            <div style="display:flex;align-items:center;gap:9px;background:var(--chip);border:1px solid var(--border);border-radius:9px;padding:7px 12px">
+              <span style="width:7px;height:7px;border-radius:50%;background:#28c840;flex-shrink:0"></span>
+              <span style="font:11.5px ui-monospace,Menlo,monospace;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ selected.url }}</span>
+              <span style="margin-left:auto;font-size:11px;color:var(--faint);flex-shrink:0">dahili tarayıcı · AdBlock açık</span>
+            </div>
+          </div>
+          <div style="max-width:680px;margin:0 auto;padding:30px 40px 60px">
+            <div style="font-size:12px;color:var(--faint);border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:22px">{{ selected.feedName }} — orijinal sayfa</div>
+            <h1 style="font-family:var(--titlefont);font-size:30px;font-weight:var(--titlewt);line-height:1.2;color:var(--fg);margin:0 0 18px">{{ selected.title }}</h1>
+            <sc-for list="{{ readerBlocks }}" as="b" hint-placeholder-count="3">
+              <sc-if value="{{ b.isP }}"><p style="font-family:var(--readfont);font-size:16px;line-height:1.72;color:var(--fg);margin:0 0 15px">{{ b.t }}</p></sc-if>
+              <sc-if value="{{ b.isH2 }}"><h2 style="font-family:var(--titlefont);font-size:20px;font-weight:600;color:var(--fg);margin:26px 0 10px">{{ b.t }}</h2></sc-if>
+              <sc-if value="{{ b.isPre }}"><pre style="background:var(--code);border:1px solid var(--border);border-radius:9px;padding:14px 16px;overflow:auto;font:12.5px/1.6 ui-monospace,Menlo,monospace;color:var(--fg);margin:0 0 15px">{{ b.t }}</pre></sc-if>
+              <sc-if value="{{ b.isQuote }}"><blockquote style="font-family:var(--readfont);font-style:italic;font-size:16px;line-height:1.7;color:var(--dim);border-left:2px solid var(--line);margin:0 0 15px;padding:2px 0 2px 18px">{{ b.t }}</blockquote></sc-if>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- OZET + TAM mode -->
+        <sc-if value="{{ modeArticle }}">
+          <div style="max-width:640px;margin:0 auto;padding:34px 44px 64px">
+            <sc-if value="{{ showResume }}">
+              <div style="display:flex;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--line);border-radius:9px;padding:9px 13px;margin-bottom:26px">
+                <span style="font-size:11.5px;color:var(--accent);font-weight:600;white-space:nowrap">Kaldığın yer · {{ progressPct }}</span>
+                <span style="flex:1;height:3px;border-radius:2px;background:var(--border)"><span style="display:block;width:{{ progressPct }};height:100%;border-radius:2px;background:var(--accent)"></span></span>
+                <span style="font-size:11px;color:var(--dim);white-space:nowrap">devam ↵</span>
+              </div>
+            </sc-if>
+            <div style="display:flex;align-items:center;gap:10px;font-size:10.5px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.14em">
+              <span>{{ selected.feedName }}</span><span style="flex:1;border-top:1px solid var(--line)"></span><span style="color:var(--faint)">{{ selected.dateLong }}</span>
+            </div>
+            <h1 style="font-family:var(--titlefont);font-size:33px;font-weight:var(--titlewt);line-height:1.18;letter-spacing:-.015em;color:var(--fg);margin:16px 0 0">{{ selected.title }}</h1>
+            <div style="margin-top:11px;display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+              <span style="font-family:var(--readfont);font-style:italic;font-size:14.5px;color:var(--dim)">{{ selected.author }} · {{ selected.mins }} dk okuma</span>
+              <sc-for list="{{ selected.tags }}" as="t" hint-placeholder-count="0"><span style="font-size:10px;color:{{ t.color }};background:{{ t.bg }};border-radius:4px;padding:2px 7px">#{{ t.name }}</span></sc-for>
+            </div>
+            <div style="width:44px;border-top:2px solid var(--fg);margin:24px 0"></div>
+            <sc-for list="{{ readerBlocks }}" as="b" hint-placeholder-count="4">
+              <sc-if value="{{ b.isP }}"><p style="font-family:var(--readfont);font-size:17px;line-height:1.75;color:var(--fg);margin:0 0 17px">{{ b.t }}</p></sc-if>
+              <sc-if value="{{ b.isH2 }}"><h2 style="font-family:var(--titlefont);font-size:21px;font-weight:600;color:var(--fg);margin:28px 0 11px">{{ b.t }}</h2></sc-if>
+              <sc-if value="{{ b.isPre }}"><pre style="background:var(--code);border:1px solid var(--border);border-radius:9px;padding:15px 17px;overflow:auto;font:13px/1.62 ui-monospace,Menlo,monospace;color:var(--fg);margin:0 0 17px">{{ b.t }}</pre></sc-if>
+              <sc-if value="{{ b.isQuote }}"><blockquote style="font-family:var(--readfont);font-style:italic;font-size:17px;line-height:1.7;color:var(--dim);border-left:2px solid var(--line);margin:0 0 17px;padding:2px 0 2px 20px">{{ b.t }}</blockquote></sc-if>
+            </sc-for>
+            <sc-if value="{{ modeOzet }}">
+              <button onClick="{{ setTam }}" style="display:flex;align-items:center;gap:9px;width:100%;margin-top:6px;padding:13px 16px;border:1px dashed var(--line);border-radius:10px;background:var(--soft);text-align:left" style-hover="background:var(--hover)">
+                <span style="font-size:13px;font-weight:600;color:var(--accent)">Tam metni oku</span>
+                <span style="font-size:12px;color:var(--dim)">Bu feed yalnızca özet veriyor — siteden tam yazıyı çek</span>
+                <span style="margin-left:auto;color:var(--accent)">→</span>
+              </button>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ THEME MENU ══ -->
+  <sc-if value="{{ isTheme }}">
+    <div class="ovl" onClick="{{ closeOverlay }}" style="position:absolute;inset:0;background:rgba(0,0,0,.14);z-index:20"></div>
+    <div class="pop" data-screen-label="Tema menusu" style="position:absolute;top:56px;right:16px;width:270px;background:var(--panel2);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);z-index:21;padding:8px">
+      <div style="padding:8px 10px 8px;font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em">Tema</div>
+      <sc-for list="{{ themeOptions }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.onClick }}" style="{{ t.rowStyle }}" style-hover="background:var(--hover)">
+          <span style="display:flex;flex-shrink:0"><span style="width:15px;height:15px;border-radius:50%;background:{{ t.c1 }};border:1px solid var(--border)"></span><span style="width:15px;height:15px;border-radius:50%;background:{{ t.c2 }};margin-left:-5px"></span></span>
+          <span style="flex:1;text-align:left;font-size:13px;color:var(--fg);font-weight:{{ t.wt }}">{{ t.name }}</span>
+          <sc-if value="{{ t.active }}"><span style="color:var(--accent);font-weight:700">✓</span></sc-if>
+        </button>
+      </sc-for>
+      <div style="border-top:1px solid var(--border);margin:8px 6px"></div>
+      <button onClick="{{ toggleAuto }}" style="display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border-radius:8px" style-hover="background:var(--hover)">
+        <span style="flex:1;text-align:left;font-size:13px;color:var(--fg)">Otomatik gündüz / gece</span>
+        <span style="width:32px;height:19px;border-radius:10px;background:{{ autoTrackBg }};position:relative;transition:background var(--tr)"><span style="position:absolute;top:2px;{{ autoKnobPos }};width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:all var(--tr)"></span></span>
+      </button>
+      <div style="padding:2px 10px 8px;font-size:11px;line-height:1.5;color:var(--faint)">Gündüz <b style="color:var(--dim)">Kağıt</b>, gece <b style="color:var(--dim)">Gece</b>.</div>
+    </div>
+  </sc-if>
+
+  <!-- ══ Aa PANEL ══ -->
+  <sc-if value="{{ isAa }}">
+    <div class="ovl" onClick="{{ closeOverlay }}" style="position:absolute;inset:0;background:rgba(0,0,0,.14);z-index:20"></div>
+    <div class="pop" data-screen-label="Aa paneli" style="position:absolute;top:104px;right:16px;width:262px;background:var(--panel2);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);z-index:21;padding:15px 17px">
+      <div style="font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em;margin-bottom:11px">Okuma Ayarları</div>
+      <div style="display:flex;border:1px solid var(--border);border-radius:8px;padding:2px;margin-bottom:13px">
+        <button onClick="{{ setSerif }}" style="{{ serifBtn }}">Serif</button>
+        <button onClick="{{ setSans }}" style="{{ sansBtn }}">Sans</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:11px;margin-bottom:13px">
+        <span style="font-size:11px;color:var(--dim)">A</span>
+        <div style="flex:1;height:3px;border-radius:2px;background:var(--border);position:relative"><span style="position:absolute;left:0;top:0;height:100%;width:{{ sizePct }};border-radius:2px;background:var(--accent)"></span><span style="position:absolute;left:{{ sizePct }};top:-5px;width:13px;height:13px;border-radius:50%;background:#fff;border:1.5px solid var(--accent);margin-left:-7px"></span></div>
+        <span style="font-size:16px;color:var(--fg)">A</span>
+      </div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:6px">Satır genişliği</div>
+      <div style="display:flex;gap:5px;margin-bottom:13px">
+        <sc-for list="{{ widthOptions }}" as="w" hint-placeholder-count="3"><button onClick="{{ w.onClick }}" style="{{ w.style }}">{{ w.name }}</button></sc-for>
+      </div>
+      <div style="font-size:10.5px;line-height:1.5;color:var(--faint);border-top:1px solid var(--border);padding-top:10px">Tema başına ayrı hatırlanır — Gece'de farklı boyut kullanabilirsin.</div>
+    </div>
+  </sc-if>
+
+  <!-- ══ ADD SPACE MODAL ══ -->
+  <sc-if value="{{ isAdd }}">
+    <div class="ovl" onClick="{{ closeOverlay }}" style="position:absolute;inset:0;background:rgba(0,0,0,.3);z-index:30;display:flex;align-items:center;justify-content:center">
+      <div class="pop" data-screen-label="Alan kurma" onClick="{{ stop }}" style="width:520px;background:var(--panel2);border:1px solid var(--border);border-radius:15px;box-shadow:var(--shadow);overflow:hidden">
+        <div style="padding:20px 24px 0">
+          <div style="font-size:10.5px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.13em">Yeni Alan</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+            <div style="flex:1;border:1px solid var(--line);border-radius:9px;padding:9px 13px;font-family:var(--titlefont);font-size:19px;color:var(--fg)">Rust<span style="display:inline-block;width:1.5px;height:18px;background:var(--accent);margin-left:2px;vertical-align:-3px"></span></div>
+            <div style="display:flex;gap:6px">
+              <span style="width:24px;height:24px;border-radius:7px;background:#a85f2e;box-shadow:0 0 0 2px var(--panel2),0 0 0 3.5px #a85f2e"></span>
+              <span style="width:24px;height:24px;border-radius:7px;background:#4a6f8e"></span>
+              <span style="width:24px;height:24px;border-radius:7px;background:#7a5f9e"></span>
+              <span style="width:24px;height:24px;border-radius:7px;background:#4a7a4a"></span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:18px 24px 0">
+          <div style="font-size:11px;font-weight:700;color:var(--fg);margin-bottom:8px">Otomatik doldurma kuralı</div>
+          <div style="border:1px solid var(--border);border-radius:10px;padding:12px 14px;background:var(--panel)">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--dim)"><span style="border:1px solid var(--border);border-radius:6px;padding:3px 9px;background:var(--reader);color:var(--fg)">başlık veya içerik</span>şunlardan birini içerirse</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+              <span style="font-size:12px;color:var(--accent);background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 9px">rust ✕</span>
+              <span style="font-size:12px;color:var(--accent);background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 9px">cargo ✕</span>
+              <span style="font-size:12px;color:var(--accent);background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 9px">tokio ✕</span>
+              <span style="font-size:12px;color:var(--accent);background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:3px 9px">borrow checker ✕</span>
+              <span style="font-size:12px;color:var(--faint);border:1px dashed var(--border);border-radius:6px;padding:3px 9px">＋ kelime</span>
+            </div>
+          </div>
+          <div style="font-size:11px;line-height:1.55;color:var(--faint);margin-top:8px">Kural her yeni yazıda otomatik çalışır; ayrıca herhangi bir yazıya <b style="font-family:ui-monospace,Menlo,monospace;color:var(--dim)">R</b> ile elle ekleyebilirsin.</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;padding:20px 24px;margin-top:16px;border-top:1px solid var(--border)">
+          <button onClick="{{ closeOverlay }}" style="font-size:12.5px;color:var(--dim);padding:8px 14px;border-radius:8px" style-hover="background:var(--hover)">Vazgeç</button>
+          <button onClick="{{ closeOverlay }}" style="font-size:12.5px;font-weight:600;color:var(--seltext);background:var(--accent);border-radius:8px;padding:8px 17px">Alanı Kur</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ══ COMMAND PALETTE ══ -->
+  <sc-if value="{{ isCmd }}">
+    <div class="ovl" onClick="{{ closeOverlay }}" style="position:absolute;inset:0;background:rgba(0,0,0,.28);z-index:40;display:flex;justify-content:center;padding-top:120px">
+      <div class="pop" data-screen-label="Komut paleti" onClick="{{ stop }}" style="width:600px;height:max-content;max-height:440px;background:var(--panel2);border:1px solid var(--border);border-radius:15px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:11px;padding:16px 18px;border-bottom:1px solid var(--border)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="var(--faint)" stroke-width="1.6"></circle><path d="M11 11l3.5 3.5" stroke="var(--faint)" stroke-width="1.6" stroke-linecap="round"></path></svg>
+          <span style="font-size:16px;color:var(--fg)">Reflection<span style="display:inline-block;width:1.5px;height:17px;background:var(--accent);margin-left:1px;vertical-align:-3px"></span></span>
+          <span style="margin-left:auto;font:11px ui-monospace,Menlo,monospace;color:var(--faint);border:1px solid var(--border);border-radius:5px;padding:2px 7px">esc</span>
+        </div>
+        <div class="vscroll" style="padding:8px;overflow-y:auto">
+          <div style="padding:6px 10px 4px;font-size:10px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em">Eylemler</div>
+          <sc-for list="{{ cmdActions }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.onClick }}" style="{{ c.rowStyle }}" style-hover="background:var(--hover)">
+              <span style="width:16px;text-align:center;color:var(--accent)">{{ c.icon }}</span>
+              <span style="flex:1;text-align:left;font-size:13px;color:var(--fg)">{{ c.name }}</span>
+              <span style="font:11px ui-monospace,Menlo,monospace;color:var(--faint)">{{ c.kbd }}</span>
+            </button>
+          </sc-for>
+          <div style="padding:10px 10px 4px;font-size:10px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.12em">Sonuçlar</div>
+          <sc-for list="{{ cmdResults }}" as="r" hint-placeholder-count="3">
+            <button onClick="{{ r.onClick }}" style="display:flex;align-items:center;gap:11px;width:100%;padding:9px 10px;border-radius:8px" style-hover="background:var(--hover)">
+              <span style="width:18px;height:18px;border-radius:5px;background:{{ r.color }};color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ r.letter }}</span>
+              <span style="flex:1;text-align:left;font-family:var(--titlefont);font-size:14px;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.title }}</span>
+              <span style="font-size:11px;color:var(--faint);flex-shrink:0">{{ r.feedName }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1340,&quot;height&quot;:860}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    const P = t => ({k:'p',t});
+    const H = t => ({k:'h2',t});
+    const C = t => ({k:'pre',t});
+    const Q = t => ({k:'quote',t});
+    const genericBody = [
+      P("Bu yazının feed özeti kısa; tam metni Verso siteden çekip okunabilir biçime çevirir. Reklamlar, gezinme çubukları ve dağınık kenar öğeleri temizlenir — geriye yalnızca yazı kalır."),
+      H("Neden önemli"),
+      P("İyi bir okuyucu içeriği taşımaktan fazlasını yapar: onu okumaya değer kılar. Tipografi, ölçü ve ritim; uzun bir yazıyı bitirmekle yarıda bırakmak arasındaki farktır."),
+      Q("Sadelik, erişilebilirliğin en yüksek biçimidir."),
+      P("Aşağıdaki kod bloğu, temaya göre renklenen tek biçimli (monospace) gövdeyle gösterilir.")
+    ];
+    this.articleData = [
+      {id:'a1', feedId:'barry', feedName:"Barry's C++ Blog", title:"Type-based vs Value-based Reflection", dek:"The library comes with a lot of queries on reflection types — some return values, some return types, and some return object sequences.", author:"Barry Revzin", date:"9 Haz", dateLong:"9 Haziran 2026", mins:11, unread:true, starred:false, spaces:[], onlySummary:false, url:"https://brevzin.github.io/c++/2026/06/09/reflection-ts/",
+        tags:[{name:'cpp'},{name:'reflection'}],
+        body:[
+          P("reflexpr(E) gives you a unique type representing properties of E. The library comes with a lot of queries on reflection types — some of those queries return values, some return types, and some return object sequences."),
+          P("On the whole, the above should be fairly familiar. It's regular template metaprogramming. It's simple — the interesting part is what happens when you lift values into types."),
+          H("Implementing the Reflection TS"),
+          P("It occurred to me recently that I could actually implement the Reflection TS on top of the p2996 design. I'm not going to implement the whole thing — just enough to solve the problem posed at the beginning of this post."),
+          C("namespace std::reflect {\n  template <meta::info R>\n  struct Reflection {\n    static constexpr auto value = R;\n  };\n}\n\n#define reflexpr(E) ::std::reflect::Reflection<^^E>"),
+          P("In the value-based reflection model, ^^E gives us a unique value for each entity, with uniqueness defined exactly how we need it. So we simply need to lift that into a type."),
+          Q("The best abstraction is the one you never have to think about twice."),
+          P("That's the whole trick. Everything else is bookkeeping around this one idea, which is why the design scales so gracefully to the rest of the TS surface.")
+        ]},
+      {id:'a2', feedId:'matklad', feedName:"matklad", title:"Ownership You Can Feel", dek:"There is a moment, around your third month of Rust, when the borrow checker stops being a wall and becomes a railing.", author:"Alex Kladov", date:"14 Tem", dateLong:"14 Temmuz 2026", mins:9, unread:true, starred:true, spaces:['rust'], onlySummary:false, url:"https://matklad.github.io/2026/07/14/ownership-you-can-feel.html",
+        tags:[{name:'rust'},{name:'borrow-checker'}],
+        body:[
+          P("There is a moment, somewhere around your third month of Rust, when the borrow checker stops being a wall and starts being a railing. You reach for a value, feel the shape of its lifetime, and route around the problem before the compiler says a word."),
+          P("This post is about getting to that moment faster — with three small exercises that make ownership tangible rather than theoretical."),
+          H("Exercise one: draw the lifetimes"),
+          P("Before writing a function, sketch which references outlive which. Not on paper necessarily — in your head is fine — but make the picture explicit. Most borrow errors are just this picture being wrong."),
+          C("fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}"),
+          P("The lifetime annotation is not noise; it is the picture, written down. Once you read it that way, the annotations stop feeling like ceremony."),
+          Q("Ownership is not a constraint the compiler imposes. It is a fact about your program the compiler helps you see."),
+          P("Do these three exercises for a week and the railing appears. You won't notice the moment it happens — only that one day the errors stopped surprising you.")
+        ]},
+      {id:'a3', feedId:'lobsters', feedName:"Lobsters", title:"Async Rust in 2026: what actually changed", dek:"A survey of what shipped, what stalled, and what the ecosystem quietly agreed to stop arguing about.", author:"lobste.rs", date:"12 Tem", dateLong:"12 Temmuz 2026", mins:6, unread:true, starred:false, spaces:['rust'], onlySummary:true, url:"https://lobste.rs/s/async-rust-2026",
+        tags:[{name:'rust'},{name:'async'}], body:genericBody},
+      {id:'a4', feedId:'barry', feedName:"Barry's C++ Blog", title:"Behold the power of meta::substitute", dek:"One of the more subtle parts of the reflection proposal is substitution — what it means and why it matters.", author:"Barry Revzin", date:"2 Mar", dateLong:"2 Mart 2026", mins:9, unread:true, starred:false, spaces:[], onlySummary:false, url:"https://brevzin.github.io/c++/2026/03/02/substitute/",
+        tags:[{name:'cpp'}], body:genericBody},
+      {id:'a5', feedId:'barry', feedName:"Barry's C++ Blog", title:"Reflecting JSON into C++ Objects", dek:"Parsing JSON at compile time sounds absurd — but with reflection it is surprisingly natural.", author:"Barry Revzin", date:"26 Haz", dateLong:"26 Haziran 2025", mins:15, unread:true, starred:false, spaces:[], onlySummary:false, url:"https://brevzin.github.io/c++/2025/06/26/json/",
+        tags:[{name:'cpp'},{name:'json'}], body:genericBody},
+      {id:'a6', feedId:'huggingface', feedName:"Hugging Face — Blog", title:"Distilling a 70B model onto your laptop", dek:"Practical recipes for shrinking large models without losing the plot.", author:"HF Team", date:"10 Tem", dateLong:"10 Temmuz 2026", mins:12, unread:true, starred:false, spaces:['ml'], onlySummary:true, url:"https://huggingface.co/blog/distillation-2026",
+        tags:[{name:'ml'},{name:'llm'}], body:genericBody},
+      {id:'a7', feedId:'matklad', feedName:"matklad", title:"Flat In-Memory Storage, Revisited", dek:"Why a boring array of structs still beats the clever thing, most of the time.", author:"Alex Kladov", date:"8 Tem", dateLong:"8 Temmuz 2026", mins:14, unread:false, starred:false, spaces:['rust'], onlySummary:false, url:"https://matklad.github.io/2026/07/08/flat-storage.html",
+        tags:[{name:'rust'},{name:'performance'}], body:genericBody},
+      {id:'a8', feedId:'dangerzone', feedName:"The Danger Zone", title:"On the Ignorability of Attributes", dek:"", author:"J. Doe", date:"25 Mar", dateLong:"25 Mart 2026", mins:7, unread:false, starred:false, spaces:[], onlySummary:false, url:"https://thedangerzone.dev/attributes",
+        tags:[], body:genericBody}
+    ];
+    this.feedMeta = [
+      {id:'barry', letter:'B', color:'#c96a4a', name:"Barry's C++ Blog", count:'8'},
+      {id:'matklad', letter:'M', color:'#5f7d54', name:"matklad", count:'13'},
+      {id:'lobsters', letter:'L', color:'#b05555', name:"Lobsters", count:'123'},
+      {id:'anteru', letter:'A', color:'#5a8fbf', name:"Anteru's blog", count:'11'},
+      {id:'huggingface', letter:'H', color:'#d9a441', name:"Hugging Face — Blog", count:'810'},
+      {id:'enhance', letter:'C', color:'#4a9187', name:"Computer, Enhance!", count:'26'},
+      {id:'dangerzone', letter:'D', color:'#7a6bb5', name:"The Danger Zone", count:'94'}
+    ];
+    this.spaceMeta = [
+      {id:'rust', name:'Rust', color:'#a85f2e', count:'12'},
+      {id:'robotik', name:'Robotik', color:'#4a6f8e', count:'4'},
+      {id:'ml', name:'ML', color:'#7a5f9e', count:'7'}
+    ];
+    this.smartMeta = [
+      {id:'bugun', icon:'◷', name:'Bugün', count:'14'},
+      {id:'yildizli', icon:'★', name:'Yıldızlı', count:'6'},
+      {id:'sonra', icon:'◎', name:'Sonra Oku', count:'3'}
+    ];
+    this.themeMeta = [
+      {id:'kagit', name:'Kağıt', c1:'#f9f5ee', c2:'#b0532a'},
+      {id:'gece', name:'Gece', c1:'#17181d', c2:'#d07a4f'},
+      {id:'yosun', name:'Yosun', c1:'#eef2e6', c2:'#4a7a4a'},
+      {id:'cyber', name:'Cyberpunk', c1:'#0b0f14', c2:'#3ef08a'}
+    ];
+    this.state = {
+      theme:'kagit', auto:true,
+      selKind:'feed', selId:'barry',
+      articleId:'a1', mode:'ozet',
+      overlay:null, refreshing:false,
+      readFont:'serif', size:2, width:'orta',
+      starred:{a2:true}, later:{}, progress:34
+    };
+  }
+  componentDidMount(){
+    this._key = (e)=>{
+      const k = e.key;
+      if((e.metaKey||e.ctrlKey) && (k==='k'||k==='K')){ e.preventDefault(); this.setState(s=>({overlay: s.overlay==='cmd'?null:'cmd'})); return; }
+      if(k==='Escape'){ if(this.state.overlay){ e.preventDefault(); this.setState({overlay:null}); } return; }
+      if(this.state.overlay) return;
+      if(k==='j'||k==='ArrowDown'){ e.preventDefault(); this.step(1); }
+      else if(k==='k'||k==='ArrowUp'){ e.preventDefault(); this.step(-1); }
+      else if(k==='s'||k==='S'){ this.toggleStar(); }
+      else if(k==='m'||k==='M'){ this.markRead(); }
+      else if(k==='r'||k==='R'){ this.addLater(); }
+      else if(k==='v'||k==='V'){ this.setState({mode:'web'}); }
+    };
+    window.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount(){ window.removeEventListener('keydown', this._key); }
+
+  currentArticles(){
+    const s=this.state;
+    let list;
+    if(s.selKind==='feed') list=this.articleData.filter(a=>a.feedId===s.selId);
+    else if(s.selKind==='space') list=this.articleData.filter(a=>(a.spaces||[]).includes(s.selId));
+    else if(s.selId==='yildizli') list=this.articleData.filter(a=>this.state.starred[a.id]);
+    else if(s.selId==='sonra') list=this.articleData.filter(a=>this.state.later[a.id]);
+    else list=this.articleData.slice();
+    return list.length?list:this.articleData.slice(0,5);
+  }
+  step(d){
+    const list=this.currentArticles();
+    const i=Math.max(0,list.findIndex(a=>a.id===this.state.articleId));
+    const ni=Math.min(list.length-1,Math.max(0,i+d));
+    this.setState({articleId:list[ni].id, mode:'ozet', progress: d?0:this.state.progress});
+  }
+  selectArticle(id){ this.setState({articleId:id, overlay:null, mode:'ozet', progress:0}); }
+  selectList(kind,id){
+    const list=(kind==='feed')?this.articleData.filter(a=>a.feedId===id):(kind==='space')?this.articleData.filter(a=>(a.spaces||[]).includes(id)):this.articleData;
+    const first=(list[0]||this.articleData[0]);
+    this.setState({selKind:kind, selId:id, articleId:first.id, mode:'ozet', progress:0});
+  }
+  setTheme(t){ this.setState({theme:t}); }
+  toggleStar(){ const id=this.state.articleId; this.setState(s=>({starred:{...s.starred,[id]:!s.starred[id]}})); }
+  addLater(){ const id=this.state.articleId; this.setState(s=>({later:{...s.later,[id]:true}})); }
+  markRead(){ this.step(1); }
+  refresh(){ this.setState({refreshing:true}); setTimeout(()=>this.setState({refreshing:false}),900); }
+
+  renderVals(){
+    const s=this.state;
+    const sel = this.articleData.find(a=>a.id===s.articleId) || this.articleData[0];
+    const starOn = !!s.starred[sel.id];
+    const arts = this.currentArticles();
+    const themeLabels={kagit:'Kağıt',gece:'Gece',yosun:'Yosun',cyber:'Cyberpunk'};
+
+    const tagColor = () => ({color:'var(--accent)', bg:'var(--soft)'});
+    const decTags = (tags)=> (tags||[]).map(t=>({name:t.name, ...tagColor()}));
+
+    // sidebar smart lists
+    const smartLists = this.smartMeta.map(m=>{
+      const active = s.selKind==='smart' && s.selId===m.id;
+      return {...m,
+        onClick:()=>this.selectList('smart',m.id),
+        iconColor: active?'var(--accent)':'var(--faint)',
+        textColor: active?'var(--fg)':'var(--dim)',
+        rowStyle:`display:flex;align-items:center;gap:9px;width:100%;padding:6px 10px;margin:0 8px;width:calc(100% - 16px);border-radius:8px;transition:background var(--tr);${active?'background:var(--soft)':''}`
+      };
+    });
+    // spaces
+    const spaces = this.spaceMeta.map(m=>{
+      const active = s.selKind==='space' && s.selId===m.id;
+      return {...m,
+        onClick:()=>this.selectList('space',m.id),
+        textColor: active?'var(--fg)':'var(--dim)',
+        countColor: active?'var(--accent)':'var(--faint)',
+        rowStyle:`display:flex;align-items:center;gap:9px;padding:6px 10px;margin:0 8px;width:calc(100% - 16px);border-radius:8px;transition:background var(--tr);${active?'background:var(--soft);box-shadow:inset 3px 0 0 '+m.color:''}`
+      };
+    });
+    // feeds
+    const feeds = this.feedMeta.map(m=>{
+      const active = s.selKind==='feed' && s.selId===m.id;
+      return {...m,
+        onClick:()=>this.selectList('feed',m.id),
+        textColor: active?'var(--fg)':'var(--dim)',
+        rowStyle:`display:flex;align-items:center;gap:9px;padding:5px 10px;margin:0 8px;width:calc(100% - 16px);border-radius:8px;transition:background var(--tr);${active?'background:var(--soft)':''}`
+      };
+    });
+
+    // article rows
+    const articles = arts.map(a=>{
+      const active = a.id===s.articleId;
+      const read = !a.unread && !active;
+      return {
+        title:a.title, dek:a.dek, meta:`${a.feedName} · ${a.date} · ${a.mins} dk`,
+        showDek: !!a.dek && (active || a.unread),
+        hasTags: (a.tags||[]).length>0,
+        tags: decTags(a.tags),
+        starred: !!s.starred[a.id],
+        onClick:()=>this.selectArticle(a.id),
+        dotColor: (a.unread && !active)?'var(--accent)':'transparent',
+        metaColor: active?'var(--accent)':'var(--faint)',
+        titleColor: read?'var(--faint)':(active?'var(--seltext)':'var(--fg)'),
+        titleWeight: read?'400':'500',
+        rowStyle:`display:block;width:calc(100% - 12px);margin:0 6px;padding:14px 16px;border-radius:9px;text-align:left;border-bottom:1px solid var(--border);transition:background var(--tr);${active?'background:var(--soft);box-shadow:inset 3px 0 0 var(--accent)':'background:transparent'}`
+      };
+    });
+
+    // list header
+    let listKicker={show:false,text:'AKIŞ',color:'var(--accent)'}, listTitle='Akış', listSub='', breadcrumb='';
+    if(s.selKind==='feed'){ const f=this.feedMeta.find(x=>x.id===s.selId); listKicker={show:false,text:'Kaynak'}; listTitle=f?f.name:'Akış'; listSub=`${arts.length} yazı`; breadcrumb=`FeedBoba › ${f?f.name:''}`; }
+    else if(s.selKind==='space'){ const sp=this.spaceMeta.find(x=>x.id===s.selId); listKicker={show:true,text:'Alan · kural + elle',color:sp?sp.color:'var(--accent)'}; listTitle=sp?sp.name:'Alan'; listSub=`${arts.length} yazı`; breadcrumb=`Alanlar › ${sp?sp.name:''}`; }
+    else { const m=this.smartMeta.find(x=>x.id===s.selId); listKicker={show:false,text:'Akıllı liste'}; listTitle=m?m.name:'Liste'; listSub=`${arts.length} yazı`; breadcrumb=m?m.name:''; }
+
+    // reader blocks by mode
+    let readerBlocks;
+    if(s.mode==='ozet'){ readerBlocks = sel.body.slice(0,2); }
+    else { readerBlocks = sel.body; }
+    const decBlocks = readerBlocks.map(b=>({t:b.t, isP:b.k==='p', isH2:b.k==='h2', isPre:b.k==='pre', isQuote:b.k==='quote'}));
+
+    // theme menu
+    const themeOptions = this.themeMeta.map(m=>{
+      const active = s.theme===m.id;
+      return {...m, active, wt:active?'600':'400',
+        onClick:()=>this.setTheme(m.id),
+        rowStyle:`display:flex;align-items:center;gap:11px;width:100%;padding:8px 10px;border-radius:8px;transition:background var(--tr);${active?'background:var(--soft)':''}`
+      };
+    });
+
+    // Aa
+    const widthOptions = ['Dar','Orta','Geniş'].map(w=>{
+      const key=w.toLowerCase().replace('ş','s');
+      const active = (s.width===key)||(w==='Orta'&&s.width==='orta');
+      return {name:w, onClick:()=>this.setState({width:key}),
+        style:`flex:1;text-align:center;font-size:11.5px;padding:5px 0;border-radius:6px;transition:all var(--tr);${active?'color:var(--accent);border:1px solid var(--accent);background:var(--soft);font-weight:600':'color:var(--dim);border:1px solid var(--border)'}`};
+    });
+    const segActive='padding:4px 12px;font-size:11.5px;font-weight:600;color:var(--seltext);background:var(--accent);border-radius:6px;transition:all var(--tr)';
+    const segIdle='padding:4px 12px;font-size:11.5px;color:var(--dim);border-radius:6px;transition:all var(--tr)';
+
+    // command palette
+    const cmdActions=[
+      {icon:'＋', name:'Yeni feed ekle', kbd:'A', onClick:()=>this.setState({overlay:'add'})},
+      {icon:'◎', name:'Yeni alan oluştur', kbd:'', onClick:()=>this.setState({overlay:'add'})},
+      {icon:'↻', name:'Tümünü yenile', kbd:'⌘R', onClick:()=>{this.setState({overlay:null});this.refresh();}},
+      {icon:'✓', name:'Tümünü okundu say', kbd:'', onClick:()=>this.setState({overlay:null})}
+    ].map(c=>({...c, rowStyle:'display:flex;align-items:center;gap:11px;width:100%;padding:9px 10px;border-radius:8px'}));
+    const cmdResults=this.articleData.slice(0,3).map(a=>{
+      const f=this.feedMeta.find(x=>x.id===a.feedId);
+      return {title:a.title, feedName:a.feedName, letter:f?f.letter:'•', color:f?f.color:'#888', onClick:()=>this.selectArticle(a.id)};
+    });
+
+    return {
+      theme:s.theme, themeLabel:themeLabels[s.theme],
+      breadcrumb, smartLists, spaces, feeds, articles,
+      listKicker, listTitle, listSub,
+      selected:{...sel, tags:decTags(sel.tags)},
+      readerBlocks:decBlocks,
+      progressPct: s.progress+'%',
+      showResume: s.progress>0 && s.mode!=='web',
+      modeOzet:s.mode==='ozet', modeTam:s.mode==='tam', modeWeb:s.mode==='web', modeArticle:s.mode!=='web',
+      tabOzet: s.mode==='ozet'?segActive:segIdle,
+      tabTam: s.mode==='tam'?segActive:segIdle,
+      tabWeb: s.mode==='web'?segActive:segIdle,
+      setOzet:()=>this.setState({mode:'ozet'}),
+      setTam:()=>this.setState({mode:'tam', progress:s.progress||12}),
+      setWeb:()=>this.setState({mode:'web'}),
+      starColor: starOn?'var(--accent)':'var(--dim)',
+      starGlyph: starOn?'★':'☆',
+      toggleStar:()=>this.toggleStar(),
+      addLater:()=>this.addLater(),
+      refresh:()=>this.refresh(),
+      spinStyle: s.refreshing?'animation:vspin .7s linear infinite;transform-origin:center':'',
+      openCmd:()=>this.setState({overlay:'cmd'}),
+      openTheme:()=>this.setState({overlay:'theme'}),
+      openAa:()=>this.setState({overlay:'aa'}),
+      openAdd:()=>this.setState({overlay:'add'}),
+      closeOverlay:()=>this.setState({overlay:null}),
+      stop:(e)=>{ if(e&&e.stopPropagation) e.stopPropagation(); },
+      isCmd:s.overlay==='cmd', isTheme:s.overlay==='theme', isAa:s.overlay==='aa', isAdd:s.overlay==='add',
+      themeOptions,
+      toggleAuto:()=>this.setState({auto:!s.auto}),
+      autoTrackBg: s.auto?'var(--accent)':'var(--border)',
+      autoKnobPos: s.auto?'right:2px':'left:2px',
+      serifBtn: s.readFont==='serif'?'flex:1;text-align:center;padding:5px 0;font-family:var(--titlefont);font-size:13px;font-weight:600;color:var(--seltext);background:var(--accent);border-radius:6px':'flex:1;text-align:center;padding:5px 0;font-size:13px;color:var(--dim);border-radius:6px',
+      sansBtn: s.readFont==='sans'?'flex:1;text-align:center;padding:5px 0;font-size:13px;font-weight:600;color:var(--seltext);background:var(--accent);border-radius:6px':'flex:1;text-align:center;padding:5px 0;font-size:13px;color:var(--dim);border-radius:6px',
+      setSerif:()=>this.setState({readFont:'serif'}),
+      setSans:()=>this.setState({readFont:'sans'}),
+      sizePct: (35 + s.size*10)+'%',
+      widthOptions,
+      cmdActions, cmdResults
+    };
+  }
+}
+</script>
+</body>
+</html>
