@@ -25,7 +25,7 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": "default-src 'self'; img-src 'self' https: data:; media-src 'self' https:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-src https://player.vimeo.com https://w.soundcloud.com https://open.spotify.com https://player.twitch.tv; connect-src 'self' ipc: http://ipc.localhost; object-src 'none'; base-uri 'self'"
     }
   },
   "bundle": {

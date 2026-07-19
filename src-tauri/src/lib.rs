@@ -258,7 +258,13 @@ fn search_articles(query: String, state: State<'_, AppState>) -> Result<Vec<Arti
 
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
-    open::that(url).map_err(|e| e.to_string())
+    // Şema beyaz-listesi: feed <a> bağlantıları buraya düşer; ammonia javascript:/file:'i
+    // temizler ama tel:/magnet:/ssh: gibi şemalar geçebilir. Sadece güvenli olanları OS'e ver.
+    let parsed: tauri::Url = url.parse().map_err(|e| format!("invalid URL: {e}"))?;
+    match parsed.scheme() {
+        "http" | "https" | "mailto" => open::that(&url).map_err(|e| e.to_string()),
+        other => Err(format!("blocked URL scheme: {other}")),
+    }
 }
 
 #[tauri::command]
