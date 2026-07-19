@@ -432,12 +432,24 @@ export const useStore = create<State & Actions>()(
             filters: [{ name: "OPML", extensions: ["opml", "xml"] }],
           });
           if (typeof path === "string") {
-            await api.importOpml(path);
+            const n = await api.importOpml(path);
             await get().loadSidebar();
             await get().loadArticles();
+            // Görünür sonuç: kaç yeni feed geldi (0 ise zaten import edilmiş demek).
+            set({
+              taskProgress: {
+                kind: "import",
+                done: 1,
+                total: 1,
+                label: n > 0 ? `${n} feed${n === 1 ? "" : "s"} imported` : "No new feeds (already imported)",
+              },
+            });
+            setTimeout(() => set({ taskProgress: null }), 3000);
           }
         } catch (e) {
           console.error("importOpml", e);
+          set({ taskProgress: { kind: "import", done: 1, total: 1, label: "Import failed — check the file" } });
+          setTimeout(() => set({ taskProgress: null }), 3400);
         }
       },
 

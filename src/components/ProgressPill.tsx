@@ -38,10 +38,16 @@ export default function ProgressPill() {
         style={{ animation: doneAll ? undefined : "vspin .7s linear infinite", transformOrigin: "center", flexShrink: 0 }}
       />
       <span style={{ fontSize: 12, color: "var(--fg)", whiteSpace: "nowrap" }}>
-        {doneAll ? "Done" : label} ·{" "}
-        <b style={{ fontFamily: "ui-monospace, Menlo, monospace", fontWeight: 600 }}>
-          {p.done}/{p.total}
-        </b>
+        {doneAll ? (
+          p.label || "Done"
+        ) : (
+          <>
+            {label} ·{" "}
+            <b style={{ fontFamily: "ui-monospace, Menlo, monospace", fontWeight: 600 }}>
+              {p.done}/{p.total}
+            </b>
+          </>
+        )}
       </span>
       {p.label && !doneAll && (
         <span style={{ fontSize: 11.5, color: "var(--faint)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 170 }}>
